@@ -1,17 +1,14 @@
-import { useState } from "react";
 import "./App.css";
+import { FilesTable } from "./files-table/files-table";
+import { PageHeader } from "./heading/heading";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div>Top</div>
+      <PageHeader />
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+      <div>
+        <FilesTable />
       </div>
     </>
   );
