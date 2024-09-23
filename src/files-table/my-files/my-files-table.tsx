@@ -4,6 +4,7 @@ import { FilesTable } from "../common/files-table";
 import { SortType } from "../hooks/use-fetch-files";
 import { MyFilesTableRow } from "./my-files-table-row";
 import FileDownloadIconDownload from "../../components/icons/filedownload";
+import CustomCheckBox from "../../components/CustomCheckBox";
 
 interface FilesTableProps {
   filesTableData?: FileData[];
@@ -47,22 +48,31 @@ const hasScheduledFiles = (selectedFiles?: FileData[]) => {
   return selectedFiles?.some((file) => file.status === "scheduled");
 };
 
-export const MyFilesTable: React.FC<FilesTableProps> = memo(
-  ({ filesTableData, onSelectFile, selectedFiles, handleSelectAll, onDownloadClick }) => {
-    const isDownloadDisabled = hasScheduledFiles(selectedFiles) || !selectedFiles?.length;
+const getCheckboxState = (
+  selectedFiles?: FileData[],
+  totalFiles?: FileData[]
+) => {
+  if (!selectedFiles?.length) return "off";
+  if (selectedFiles.length === totalFiles?.length) return "checked";
+  return "on";
+};
 
+export const MyFilesTable: React.FC<FilesTableProps> = memo(
+  ({
+    filesTableData,
+    onSelectFile,
+    selectedFiles,
+    handleSelectAll,
+    onDownloadClick,
+  }) => {
+    const isDownloadDisabled =
+      hasScheduledFiles(selectedFiles) || !selectedFiles?.length;
+    const checkboxState = getCheckboxState(selectedFiles, filesTableData);
 
     return (
       <div className="container mx-auto p-4">
         <div className="text-xl font-bold mb-4 flex items-center">
-          <input
-            type="checkbox"
-            role="checkbox"
-            aria-label="Select all files"
-            checked={selectedFiles ? selectedFiles.length > 0 : false}
-            onChange={() => handleSelectAll()}
-            className="mr-2"
-          />
+          <CustomCheckBox aria-label="Select all files" value={checkboxState} onClick={handleSelectAll} />
           <span className="mr-4">Selected {selectedFiles?.length}</span>
           <button
             className={`bg-transparent flex items-center ${

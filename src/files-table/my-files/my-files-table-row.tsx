@@ -15,7 +15,7 @@ interface Props {
 export const MyFilesTableRow: React.FC<Props> = memo(
   ({ columns, fileData, isSelected, onSelectItem }) => {
     return (
-      <FilesTableRow isSelected={isSelected} fileData={fileData}>
+      <FilesTableRow onSelectItem={onSelectItem} isSelected={isSelected} fileData={fileData}>
         {columns.map(({ width }, index) => (
           <React.Fragment key={`${fileData?.name}-${index}`}>
             {index === 0 && (

@@ -14,7 +14,10 @@ export const downloadFiles = (files?: FileData[]) => {
       reject(new Error("Download denied: One or more files are scheduled."));
     } else {
       setTimeout(() => {
-        toast.success("Download successful!");
+        const fileDetails = files
+          .map((file) => `${file.device}: ${file.path}`)
+          .join(", ");
+        toast.success("Download successful" + fileDetails);
         resolve();
       }, 1000);
     }
