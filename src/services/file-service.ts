@@ -8,7 +8,6 @@ export type FileData = {
 export interface TableColumn {
     width: number;
   }
-  
 
 export class FileService {
   async fetchFiles(): Promise<FileData[]> {

@@ -17,7 +17,7 @@ export const MyFilesTableRow: React.FC<Props> = memo(
     return (
       <FilesTableRow isSelected={isSelected} fileData={fileData}>
         {columns.map(({ width }, index) => (
-          <>
+          <React.Fragment key={`${fileData?.name}-${index}`}>
             {index === 0 && (
               <TableCell dataTestId="select" width={width}>
                 <input
@@ -25,6 +25,8 @@ export const MyFilesTableRow: React.FC<Props> = memo(
                   checked={isSelected}
                   role="checkbox"
                   className="cursor-pointer"
+                  aria-label="Select file"
+                  aria-checked={isSelected}
                   onChange={onSelectItem}
                   data-testid="select"
                 />
@@ -57,14 +59,18 @@ export const MyFilesTableRow: React.FC<Props> = memo(
                           : "bg-yellow-500"
                       }`}
                     ></span>
-                    <span>{fileData.status}</span>
+                    <span>
+                      {fileData?.status === "available"
+                        ? "Available"
+                        : "Scheduled"}
+                    </span>
                   </div>
                 ) : (
                   fileData?.status ?? "-"
                 )}
               </TableCell>
             )}
-          </>
+          </React.Fragment>
         ))}
       </FilesTableRow>
     );

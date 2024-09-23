@@ -10,6 +10,7 @@ interface FilesTableProps {
   selectedFiles?: FileData[];
   onSelectFile: (file: FileData) => void;
   onDownloadClick: () => void;
+  handleSelectAll: () => void;
 }
 
 type FilesColumn = TableColumn & { header: string; targetSortType: SortType };
@@ -42,24 +43,35 @@ const Headers: FilesColumn[] = [
   },
 ];
 
-const handleSelectAll = () => {
-  console.log("Select All");
+const hasScheduledFiles = (selectedFiles?: FileData[]) => {
+  return selectedFiles?.some((file) => file.status === "scheduled");
 };
 
 export const MyFilesTable: React.FC<FilesTableProps> = memo(
-  ({ filesTableData, onSelectFile, selectedFiles }) => {
+  ({ filesTableData, onSelectFile, selectedFiles, handleSelectAll, onDownloadClick }) => {
+    const isDownloadDisabled = hasScheduledFiles(selectedFiles) || !selectedFiles?.length;
+
+
     return (
       <div className="container mx-auto p-4">
         <div className="text-xl font-bold mb-4 flex items-center">
           <input
             type="checkbox"
             role="checkbox"
+            aria-label="Select all files"
             checked={selectedFiles ? selectedFiles.length > 0 : false}
-            onClick={handleSelectAll}
+            onChange={() => handleSelectAll()}
             className="mr-2"
           />
           <span className="mr-4">Selected {selectedFiles?.length}</span>
-          <button className="bg-transparent flex items-center">
+          <button
+            className={`bg-transparent flex items-center ${
+              isDownloadDisabled ? "text-gray-400 cursor-not-allowed" : ""
+            }`}
+            aria-label="Download selected files"
+            disabled={isDownloadDisabled}
+            onClick={() => onDownloadClick()}
+          >
             <FileDownloadIconDownload />
             Download Selected
           </button>
@@ -85,5 +97,3 @@ export const MyFilesTable: React.FC<FilesTableProps> = memo(
     );
   }
 );
-
-MyFilesTable.displayName = "MyFilesTable";
