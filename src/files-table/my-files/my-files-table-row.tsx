@@ -56,7 +56,7 @@ export const MyFilesTableRow: React.FC<Props> = memo(
                       className={`inline-block w-4 h-4 rounded-full mr-2 ${
                         fileData.status === "available"
                           ? "bg-green-500"
-                          : "bg-yellow-500"
+                          : "bg-transparent"
                       }`}
                     ></span>
                     <span>

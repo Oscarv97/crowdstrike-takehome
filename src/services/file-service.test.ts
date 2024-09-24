@@ -19,7 +19,8 @@ describe('FileService', () => {
         ok: true,
         json: () => Promise.resolve(mockFiles),
       })
-    ) as vi.Mock;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ) as any;
 
     const result = await fileService.fetchFiles();
     expect(result).toEqual(mockFiles);
@@ -31,7 +32,8 @@ describe('FileService', () => {
       Promise.resolve({
         ok: false,
       })
-    ) as vi.Mock;
+       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any;
 
     await expect(fileService.fetchFiles()).rejects.toThrow('There was an issue fetching the files');
     expect(fetch).toHaveBeenCalledWith('./data.json');

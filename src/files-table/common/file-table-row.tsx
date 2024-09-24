@@ -17,9 +17,9 @@ export const FilesTableRow: React.FC<Props> = memo(
       <tr
         id={`file-item-${fileData?.name}`}
         onClick={onSelectItem}
-        className={`flex w-full  px-4 border border-gray-400 rounded-lg text-left ${
+        className={`flex w-full px-4 border border-gray-300 text-left ${
           isSelected ? "bg-gray-200" : ""
-        } hover:bg-gray-200 hover:shadow-lg my-2 transition-all duration-300`}
+        } hover:bg-slate-200 hover:shadow-lg transition-all duration-300`}
       >
         {children}
       </tr>

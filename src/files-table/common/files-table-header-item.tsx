@@ -6,7 +6,6 @@ interface FilesTableHeaderItemProps {
   headerName: string;
   index: number;
   className?: string;
-
   width: number;
 }
 
@@ -18,7 +17,7 @@ export const FilesTableHeaderItem: React.FC<FilesTableHeaderItemProps> = memo(
         key={index}
         style={{ width: `${width}%` }}
         className={twMerge(
-          "flex px-4 relative text-xl",
+          "flex px-4 relative text-xl  border-t h-12 border-gray-300 ",
           className
         )}
       >

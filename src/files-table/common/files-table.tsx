@@ -1,9 +1,8 @@
 import React, { memo } from "react";
-import { SortType } from "../hooks/use-fetch-files";
 import { TableColumn } from "../../services/file-service";
 import { FilesTableHeaderItem } from "./files-table-header-item";
 
-type ColumnsProps = TableColumn & { header: string; targetSortType?: SortType };
+type ColumnsProps = TableColumn & { header: string; };
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -24,7 +23,7 @@ export const FilesTable: React.FC<Props> = memo(
       >
         <thead
           data-testid="files-table-header"
-          className="sticky top-0 flex justify-between w-full border-2 border-transparent bg-gray050 text-sm font-semibold z-10"
+          className="sticky top-0 flex justify-between w-full border  bg-gray050 text-sm font-semibold z-10"
         >
           <tr className="flex w-full">
             {columns.map(({ header, width }, index) => (

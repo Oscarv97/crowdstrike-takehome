@@ -14,14 +14,14 @@ interface FilesTableProps {
   handleSelectAll: () => void;
 }
 
-type FilesColumn = TableColumn & { header: string; };
-const Headers: FilesColumn[] = [
-  { header: "",  width: 10 },
+type FilesColumn = TableColumn & { header: string };
+const headers: FilesColumn[] = [
+  { header: "", width: 10 },
   { header: "Name", width: 20 },
   { header: "Device", width: 20 },
-  { header: "Path",  width: 50 },
+  { header: "Path", width: 50 },
   { header: "Status", width: 20 },
-]
+];
 
 export const MyFilesTable: React.FC<FilesTableProps> = memo(
   ({
@@ -37,54 +37,60 @@ export const MyFilesTable: React.FC<FilesTableProps> = memo(
     const showDownloadUnavailableMessage =
     isDownloadDisabled && selectedFiles?.length;
 
-  return (
-    <div className="container mx-auto p-4">
-      <div className="text-xl font-bold mb-4 flex sm:flex-row items-center">
-        <div className="flex items-center mb-2 sm:mb-0">
-          <CustomCheckBox
-            aria-label="Select all files"
-            value={checkboxState}
-            onClick={handleSelectAll}
-          />
-          <span className="ml-2 text-lg sm:text-xs">Selected {selectedFiles?.length}</span>
-        </div>
-        <div className="flex flex-col sm:flex-row items-center">
-          <button
-            className={`bg-transparent flex items-center text-sm sm:text-base ${
-              isDownloadDisabled ? "text-gray-400 cursor-not-allowed" : ""
-            }`}
-            aria-label="Download selected files"
-            disabled={isDownloadDisabled}
-            onClick={() => onDownloadClick()}
-          >
-            <FileDownloadIconDownload />
-            <span className="ml-2">Download Selected</span>
-          </button>
-          {showDownloadUnavailableMessage ? (
+
+    return (
+      <div className="container mx-auto p-4">
+        <div className="text-xl font-bold mb-4 flex items-center">
+          <div className="ml-4 flex w-48 space-x-4 items-center font-semibold text-base">
+            <CustomCheckBox
+              aria-label="Select all files"
+              value={checkboxState}
+              onClick={handleSelectAll}
+            />
+            <span>
+              Selected:  {selectedFiles?.length ? selectedFiles?.length : "None"}
+            </span>
+          </div>
+          <div className="ml-16 w-48">
+            <button
+              className={`h-8 p-2 flex items-center text-sm sm:text-base ${
+                isDownloadDisabled
+                  ? "bg-slate-300 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-300 text-white cursor-pointer"
+              }`}
+              aria-label="Download selected files"
+              disabled={isDownloadDisabled}
+              onClick={() => onDownloadClick()}
+            >
+              <FileDownloadIconDownload />
+              <span className="ml-2">Download Selected</span>
+            </button>
+
+          </div>
+            {showDownloadUnavailableMessage ? (
             <p className="text-red-500 text-xs mt-1 sm:mt-0 sm:ml-4">
-              Only available files can be downloaded
+              Unable to download scheduled files.
             </p>
           ) : null}
         </div>
+        {filesTableData?.length ? (
+          <FilesTable columns={headers}>
+            {filesTableData.map((fileData) => (
+              <MyFilesTableRow
+                columns={headers}
+                key={fileData.name}
+                fileData={fileData}
+                isSelected={
+                  selectedFiles?.some(
+                    (selectedFile) => selectedFile.name === fileData.name
+                  ) ?? false
+                }
+                onSelectItem={() => onSelectFile(fileData)}
+              />
+            ))}
+          </FilesTable>
+        ) : null}
       </div>
-      {filesTableData?.length ? (
-        <FilesTable columns={Headers}>
-          {filesTableData.map((fileData) => (
-            <MyFilesTableRow
-              columns={Headers}
-              key={fileData.name}
-              fileData={fileData}
-              isSelected={
-                selectedFiles?.some(
-                  (selectedFile) => selectedFile.name === fileData.name
-                ) ?? false
-              }
-              onSelectItem={() => onSelectFile(fileData)}
-            />
-          ))}
-        </FilesTable>
-      ) : null}
-    </div>
-  );
-});
-
+    );
+  }
+);

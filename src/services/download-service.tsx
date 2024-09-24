@@ -14,10 +14,18 @@ export const downloadFiles = (files?: FileData[]) => {
       reject("Download denied: One or more files are scheduled.");
     } else {
       setTimeout(() => {
-        const fileDetails = files
-          .map((file) => `${file.device}: ${file.path}`)
-          .join(", ");
-        toast.success("Download successful! \n" + fileDetails);
+        toast.success(
+          <div>
+            Download Success <br />{" "}
+            <ol>
+              {files.map((file) => (
+                <li className="text-xs" key={file.device}>
+                 <b>{file.device}</b>:{file.path}
+                </li>
+              ))}
+            </ol>
+          </div>
+        );
         resolve();
       }, 1000);
     }
