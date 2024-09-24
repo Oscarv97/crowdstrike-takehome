@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 function App() {
   return (
     <>
-      <h3 className="text-2xl font-semibold font-mono">Oscar Vial CrowdStrike</h3>
+      <h3 className="text-2xl font-semibold font-mono">Oscar Vial</h3>
       <div>
         <FilesPage />
         <ToastContainer />
