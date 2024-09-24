@@ -6,7 +6,7 @@ const FileDownloadIcon: React.FC = () => (
     height="30px"
     viewBox="0 0 24 24"
     fill="none"
-    className="mr-2"
+    className="w-4 h-4 sm:w-6 sm:h-6"
     xmlns="http://www.w3.org/2000/svg"
   >
     <g id="Interface / Download">

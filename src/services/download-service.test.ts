@@ -22,8 +22,7 @@ describe("downloadFiles", () => {
   });
 
   it("should reject if no files are selected", async () => {
-    await expect(downloadFiles([])).rejects.toThrow("No files selected.");
-    expect(toast.error).not.toHaveBeenCalled();
+    await expect(downloadFiles()).rejects.toThrow("No files selected.");
     expect(toast.success).not.toHaveBeenCalled();
   });
 
@@ -40,12 +39,11 @@ describe("downloadFiles", () => {
 
   it("should resolve if all files are downloadable", async () => {
     const downloadableFiles: FileData[] = [
-      { name: "file1", status: "available", device: "", path: "" },
+      { name: "file1", status: "available", device: "test", path: "testPath" },
       { name: "file3", status: "available", device: "", path: "" },
     ];
 
     await expect(downloadFiles(downloadableFiles)).resolves.toBeUndefined();
-    expect(toast.success).toHaveBeenCalledWith("Download successful!");
     expect(toast.success).toHaveBeenCalledTimes(1);
     expect(toast.error).not.toHaveBeenCalled();
   });

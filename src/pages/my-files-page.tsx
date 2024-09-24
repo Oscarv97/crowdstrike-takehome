@@ -27,7 +27,7 @@ export const FilesPage: React.FC<unknown> = () => {
   const handleDownload = () => {
     downloadFiles(selectedFiles)
       .then(() => {
-        console.log("Download completed successfully.");
+        console.info("Download completed successfully.");
       })
       .catch((error) => {
         console.error(error.message);

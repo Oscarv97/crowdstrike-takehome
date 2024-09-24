@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 import { FileData, TableColumn } from "../../services/file-service";
 import { FilesTable } from "../common/files-table";
-import { SortType } from "../hooks/use-fetch-files";
 import { MyFilesTableRow } from "./my-files-table-row";
 import FileDownloadIconDownload from "../../components/icons/filedownload";
 import CustomCheckBox from "../../components/CustomCheckBox";
+import { getCheckboxState, hasScheduledFiles } from "./utils";
 
 interface FilesTableProps {
   filesTableData?: FileData[];
@@ -14,48 +14,14 @@ interface FilesTableProps {
   handleSelectAll: () => void;
 }
 
-type FilesColumn = TableColumn & { header: string; targetSortType: SortType };
-
+type FilesColumn = TableColumn & { header: string; };
 const Headers: FilesColumn[] = [
-  {
-    header: "",
-    targetSortType: SortType.NAME,
-    width: 10,
-  },
-  {
-    header: "Name",
-    targetSortType: SortType.NAME,
-    width: 20,
-  },
-  {
-    header: "Device",
-    targetSortType: SortType.DEVICE,
-    width: 20,
-  },
-  {
-    header: "Path",
-    targetSortType: SortType.PATH,
-    width: 50,
-  },
-  {
-    header: "Status",
-    targetSortType: SortType.STATUS,
-    width: 20,
-  },
-];
-
-const hasScheduledFiles = (selectedFiles?: FileData[]) => {
-  return selectedFiles?.some((file) => file.status === "scheduled");
-};
-
-const getCheckboxState = (
-  selectedFiles?: FileData[],
-  totalFiles?: FileData[]
-) => {
-  if (!selectedFiles?.length) return "off";
-  if (selectedFiles.length === totalFiles?.length) return "checked";
-  return "on";
-};
+  { header: "",  width: 10 },
+  { header: "Name", width: 20 },
+  { header: "Device", width: 20 },
+  { header: "Path",  width: 50 },
+  { header: "Status", width: 20 },
+]
 
 export const MyFilesTable: React.FC<FilesTableProps> = memo(
   ({
@@ -68,14 +34,23 @@ export const MyFilesTable: React.FC<FilesTableProps> = memo(
     const isDownloadDisabled =
       hasScheduledFiles(selectedFiles) || !selectedFiles?.length;
     const checkboxState = getCheckboxState(selectedFiles, filesTableData);
+    const showDownloadUnavailableMessage =
+    isDownloadDisabled && selectedFiles?.length;
 
-    return (
-      <div className="container mx-auto p-4">
-        <div className="text-xl font-bold mb-4 flex items-center">
-          <CustomCheckBox aria-label="Select all files" value={checkboxState} onClick={handleSelectAll} />
-          <span className="mr-4">Selected {selectedFiles?.length}</span>
+  return (
+    <div className="container mx-auto p-4">
+      <div className="text-xl font-bold mb-4 flex sm:flex-row items-center">
+        <div className="flex items-center mb-2 sm:mb-0">
+          <CustomCheckBox
+            aria-label="Select all files"
+            value={checkboxState}
+            onClick={handleSelectAll}
+          />
+          <span className="ml-2 text-lg sm:text-xs">Selected {selectedFiles?.length}</span>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center">
           <button
-            className={`bg-transparent flex items-center ${
+            className={`bg-transparent flex items-center text-sm sm:text-base ${
               isDownloadDisabled ? "text-gray-400 cursor-not-allowed" : ""
             }`}
             aria-label="Download selected files"
@@ -83,27 +58,33 @@ export const MyFilesTable: React.FC<FilesTableProps> = memo(
             onClick={() => onDownloadClick()}
           >
             <FileDownloadIconDownload />
-            Download Selected
+            <span className="ml-2">Download Selected</span>
           </button>
+          {showDownloadUnavailableMessage ? (
+            <p className="text-red-500 text-xs mt-1 sm:mt-0 sm:ml-4">
+              Only available files can be downloaded
+            </p>
+          ) : null}
         </div>
-        {filesTableData?.length ? (
-          <FilesTable columns={Headers}>
-            {filesTableData.map((fileData) => (
-              <MyFilesTableRow
-                columns={Headers}
-                key={fileData.name}
-                fileData={fileData}
-                isSelected={
-                  selectedFiles?.some(
-                    (selectedFile) => selectedFile.name === fileData.name
-                  ) ?? false
-                }
-                onSelectItem={() => onSelectFile(fileData)}
-              />
-            ))}
-          </FilesTable>
-        ) : null}
       </div>
-    );
-  }
-);
+      {filesTableData?.length ? (
+        <FilesTable columns={Headers}>
+          {filesTableData.map((fileData) => (
+            <MyFilesTableRow
+              columns={Headers}
+              key={fileData.name}
+              fileData={fileData}
+              isSelected={
+                selectedFiles?.some(
+                  (selectedFile) => selectedFile.name === fileData.name
+                ) ?? false
+              }
+              onSelectItem={() => onSelectFile(fileData)}
+            />
+          ))}
+        </FilesTable>
+      ) : null}
+    </div>
+  );
+});
+

@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import { FileData, FileService } from "../../services/file-service";
 
-export enum SortType {
-  NAME,
-  DEVICE,
-  PATH,
-  STATUS,
-}
-
 export const useFetchFiles = () => {
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
